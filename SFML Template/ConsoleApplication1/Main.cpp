@@ -20,6 +20,7 @@ void Draw();
 float deltaTime;
 int main()
 {
+    cout << "skhfaj"; 
     Start();
     Clock clock;
     while (window.isOpen())
