@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <SFML/Audio.hpp>
+#include "player.h"
 #include <sstream>
 #include <iomanip>
 using namespace std;
