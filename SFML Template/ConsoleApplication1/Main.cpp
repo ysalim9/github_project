@@ -10,19 +10,19 @@ using namespace sf;
 Texture cursorTex;
 RenderWindow window;
 View view;
-Texture dfr, poy, backgroundTex, homeTex, menuu, uu, levels, bock, ops, names, musichand2, musichand;
-Sprite sprt, bo, menu, b1, levpox, bockp, option_list, names_pox, musichandpox, musichandpox2;
+Texture dfr, poy, backgroundTex, homeTex, menuu, uu, levels, bock, ops, names, musichand2, musichand,menu_ingame;
+Sprite sprt, bo, menu, b1, levpox, bockp, option_list, names_pox, musichandpox, musichandpox2, menu_ingamepox;
 RectangleShape fort(Vector2f(600, 100));
 Music backgroundMusic;
 CircleShape circ(100);
 CircleShape close_options(25.f);
-RectangleShape play, l1, l2, l3, options, exite, credits, dark_window, back_credit, musicTrack, sound_c, rec1_m, rec2_m;
+RectangleShape play, l1, l2, l3, options, exite, credits, dark_window, back_credit, musicTrack, sound_c, rec1_m, rec2_m, resume, exit2, options_2,select_level,main_menu;
 Sprite customCursor;
 bool rd = 0;
 bool p = 0;
 bool a = 0;     // اتجاه حركة الطلقة (يمين، يسار، إلخ)     // عداد فريمات التحريك (Animation)
 bool e = 1;
-bool disapear;
+bool show_menu=0;
 bool music_control = 0, sound_control = 0;// متغير حالة (يمكن استخدامه للقوائم لاحقاً)
 float max = 220;
 float newlen;
@@ -111,7 +111,6 @@ void start() {
     musichandpox2.setTexture(musichand);
     musichandpox2.setScale(.1, .08);
     musichandpox2.setPosition(767, 445);
-
     rec1_m.setSize(Vector2f(240, 30)); // عرض الشريط
     rec1_m.setFillColor(Color(184, 184, 184));
     rec1_m.setPosition(565, 347);
@@ -122,6 +121,25 @@ void start() {
     rec2_m.setPosition(565, 454);
     rec2_m.setOutlineThickness(4.5);
     rec2_m.setOutlineColor(Color(80, 72, 73));
+    /////////////////////////////////////////////////////////========================================================
+    resume.setFillColor(Color::Transparent);
+    resume.setPosition(560, 146);
+    resume.setSize(Vector2f(270.f, 80.f));
+    options_2.setFillColor(Color::Transparent);
+    options_2.setPosition(560, 146);
+    options_2.setSize(Vector2f(270.f, 80.f));
+    select_level.setFillColor(Color::Transparent);
+    select_level.setPosition(560, 146);
+    select_level.setSize(Vector2f(270.f, 80.f));
+    main_menu.setFillColor(Color::Transparent);
+    main_menu.setPosition(560, 146);
+    main_menu.setSize(Vector2f(270.f, 80.f));
+    exit2.setFillColor(Color::Transparent);
+    exit2.setPosition(560, 146);
+    exit2.setSize(Vector2f(270.f, 80.f));
+    menu_ingame.loadFromFile(" menu_in_game.PNG");
+    menu_ingamepox.setTexture(menu_ingame);
+    //menu_ingamepox.setColor(Color::Transparent);
 
 
 
@@ -304,7 +322,10 @@ void ubdate() {
         {
             l1.setFillColor(Color(0, 0, 0, 150));
             if (Mouse::isButtonPressed(Mouse::Left))
+            {
                 rd = 0;
+                show_menu = 1;
+            }
         }
         else  if (l2.getGlobalBounds().contains(kok))
         {
@@ -410,6 +431,9 @@ void draw() {
 
 
     }
+    else
+        window.draw(menu_ingamepox);
+
 
     window.display();
 }

@@ -5,6 +5,4 @@ D:\project folder\SFML Template\ConsoleApplication1\Main.cpp(108,31): warning C4
 D:\project folder\SFML Template\ConsoleApplication1\Main.cpp(108,27): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\project folder\SFML Template\ConsoleApplication1\Main.cpp(112,32): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\project folder\SFML Template\ConsoleApplication1\Main.cpp(112,28): warning C4305: 'argument': truncation from 'double' to 'float'
-  player.cpp
-  Generating Code...
   ConsoleApplication1.vcxproj -> D:\project folder\SFML Template\x64\Debug\SFML Template.exe
