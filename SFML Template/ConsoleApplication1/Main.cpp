@@ -10,13 +10,13 @@ using namespace sf;
 Texture cursorTex;
 RenderWindow window;
 View view;
-Texture dfr, poy, backgroundTex, homeTex, menuu, uu, levels, bock, ops, names, musichand2, musichand,menu_ingame;
-Sprite sprt, bo, menu, b1, levpox, bockp, option_list, names_pox, musichandpox, musichandpox2, menu_ingamepox;
+Texture dfr, poy, backgroundTex, homeTex, menuu, uu, levels, bock, ops, names, musichand2, musichand,menu_ingame, resume, exit2, options_2, select_level, main_menu,vamp_s;
+Sprite sprt, bo, menu, b1, levpox, bockp, option_list, names_pox, musichandpox, musichandpox2, menu_ingamepox, resume_p, exit2p, options_2p, select_levelp, main_menup, vamp_spox;
 RectangleShape fort(Vector2f(600, 100));
 Music backgroundMusic;
 CircleShape circ(100);
 CircleShape close_options(25.f);
-RectangleShape play, l1, l2, l3, options, exite, credits, dark_window, back_credit, musicTrack, sound_c, rec1_m, rec2_m, resume, exit2, options_2,select_level,main_menu;
+RectangleShape play, l1, l2, l3, options, exite, credits, dark_window, back_credit, musicTrack, sound_c, rec1_m, rec2_m;
 Sprite customCursor;
 bool rd = 0;
 bool p = 0;
@@ -41,10 +41,37 @@ void start() {
     bock.loadFromFile("leeeeev.PNG");
     bockp.setTexture(bock);
     ops.loadFromFile("Gemini_Generated_Image_90f6yd90f6yd90f6.PNG");
-    option_list.setTexture(ops);
-    option_list.setPosition(490, 115);
-    option_list.setScale(2, 2);
+    //=====================================================================================================
+    resume.loadFromFile("Resume_.PNG");
+    options_2.loadFromFile("Options_.PNG");
+    exit2.loadFromFile("exit.PNG");
+    select_level.loadFromFile("select_.PNG");
+    main_menu.loadFromFile("main_m.PNG");
+    vamp_s.loadFromFile("background_menu_settings.PNG");
+    resume_p.setTexture(resume);                                                                         //////////////دي قايمه الحاجات اللي بتظهر جاخل اللعبه 
+    vamp_spox.setTexture(vamp_s);                                                                         //////////////دي قايمه الحاجات اللي بتظهر جاخل اللعبه 
+    options_2p.setTexture(options_2);
+    exit2p.setTexture(exit2);
+    main_menup.setTexture(main_menu);
+    select_levelp.setTexture(select_level);
+    resume_p.setColor(Color::White);
+    options_2p.setColor(Color::White);
+    exit2p.setColor(Color::White);
+    main_menup.setColor(Color::White);
+    select_levelp.setColor(Color::White);
+    resume_p.setScale(.25, .25);
+    options_2p.setScale(.25, .25);
+    main_menup.setScale(.25, .25);
+    select_levelp.setScale(.25, .25);
+    exit2p.setScale(.25, .25);
+   vamp_spox.setScale(.17, .21);
 
+
+    //====================================================================================================
+    option_list.setTexture(ops);
+    option_list.setPosition(490, 115);                                                                           ////////////////دي اللي فيها اعدادات الصوت 
+    option_list.setScale(2, 2);
+    //====================================================================================================
 
     circ.setScale(2, .23);
     menu.setTexture(menuu);
@@ -90,6 +117,7 @@ void start() {
 
     names.loadFromFile("Gemini_Generated_Image_48t0zk48t0zk48t0 - Copy.PNG");
     names_pox.setTexture(names);
+    menu_ingamepox.setColor(Color::White);
     bool isDraggingMusic = false; // هل المستخدم بيسحب المقبض حالياً؟
 
     // داخل دالة start()
@@ -122,24 +150,18 @@ void start() {
     rec2_m.setOutlineThickness(4.5);
     rec2_m.setOutlineColor(Color(80, 72, 73));
     /////////////////////////////////////////////////////////========================================================
-    resume.setFillColor(Color::Transparent);
-    resume.setPosition(560, 146);
-    resume.setSize(Vector2f(270.f, 80.f));
-    options_2.setFillColor(Color::Transparent);
-    options_2.setPosition(560, 146);
-    options_2.setSize(Vector2f(270.f, 80.f));
-    select_level.setFillColor(Color::Transparent);
-    select_level.setPosition(560, 146);
-    select_level.setSize(Vector2f(270.f, 80.f));
-    main_menu.setFillColor(Color::Transparent);
-    main_menu.setPosition(560, 146);
-    main_menu.setSize(Vector2f(270.f, 80.f));
-    exit2.setFillColor(Color::Transparent);
-    exit2.setPosition(560, 146);
-    exit2.setSize(Vector2f(270.f, 80.f));
-    menu_ingame.loadFromFile(" menu_in_game.PNG");
-    menu_ingamepox.setTexture(menu_ingame);
+
+    resume_p.setPosition(567,250 );
+    select_levelp.setPosition(567,300 );
+    main_menup.setPosition(567, 350);
+   exit2p.setPosition(567, 400);
+    options_2p.setPosition(567, 450);
+    vamp_spox.setPosition(485, 130);
+
+    menu_ingame.loadFromFile("menu_in_game.PNG");
+        menu_ingamepox.setTexture(menu_ingame);
     //menu_ingamepox.setColor(Color::Transparent);
+    menu_ingamepox.setScale(.25, .25);
 
 
 
@@ -324,7 +346,7 @@ void ubdate() {
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 rd = 0;
-                show_menu = 1;
+            
             }
         }
         else  if (l2.getGlobalBounds().contains(kok))
@@ -356,7 +378,21 @@ void ubdate() {
         }
 
     }
+    if (!e && !rd)
+    {
+        if (menu_ingamepox.getGlobalBounds().contains(mousepos))
+        {
+            menu_ingamepox.setColor(Color(200, 200, 200));
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                show_menu = 1;
 
+            }
+        }
+        else
+            menu_ingamepox.setColor(Color::White);
+
+    }
     if (Mouse::isButtonPressed(Mouse::Left))
     {
         Vector2i lop = Mouse::getPosition(window);
@@ -432,8 +468,18 @@ void draw() {
 
     }
     else
+    {
         window.draw(menu_ingamepox);
-
+        if (show_menu)
+        {
+            window.draw(vamp_spox);
+            window.draw(resume_p);
+            window.draw(select_levelp);
+            window.draw(main_menup);
+            window.draw(exit2p);
+            window.draw(options_2p);
+        }
+    }
 
     window.display();
 }
