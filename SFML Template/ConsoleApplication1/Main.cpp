@@ -23,6 +23,7 @@ bool p = 0;
 bool a = 0;     // اتجاه حركة الطلقة (يمين، يسار، إلخ)     // عداد فريمات التحريك (Animation)
 bool e = 1;
 bool show_menu=0;
+bool isopesettingsentergame=1;
 bool music_control = 0, sound_control = 0;// متغير حالة (يمكن استخدامه للقوائم لاحقاً)
 float max = 220;
 float newlen;
@@ -42,7 +43,7 @@ void start() {
     bockp.setTexture(bock);
     ops.loadFromFile("Gemini_Generated_Image_90f6yd90f6yd90f6.PNG");
     //=====================================================================================================
-    resume.loadFromFile("Resume_.PNG");
+    resume.loadFromFile("resume_p.PNG");
     options_2.loadFromFile("Options_.PNG");
     exit2.loadFromFile("exit.PNG");
     select_level.loadFromFile("select_.PNG");
@@ -59,11 +60,11 @@ void start() {
     exit2p.setColor(Color::White);
     main_menup.setColor(Color::White);
     select_levelp.setColor(Color::White);
-    resume_p.setScale(.25, .25);
-    options_2p.setScale(.25, .25);
-    main_menup.setScale(.25, .25);
-    select_levelp.setScale(.25, .25);
-    exit2p.setScale(.25, .25);
+    resume_p.setScale(.22, .22);
+    options_2p.setScale(.22, .22);
+    main_menup.setScale(.22, .22);
+    select_levelp.setScale(.22, .22);
+    exit2p.setScale(.22, .22);
    vamp_spox.setScale(.17, .21);
 
 
@@ -152,11 +153,17 @@ void start() {
     /////////////////////////////////////////////////////////========================================================
 
     resume_p.setPosition(567,250 );
-    select_levelp.setPosition(567,300 );
-    main_menup.setPosition(567, 350);
-   exit2p.setPosition(567, 400);
-    options_2p.setPosition(567, 450);
+    select_levelp.setPosition(567,310 );
+    main_menup.setPosition(567, 370);
+   exit2p.setPosition(567, 430);
+    options_2p.setPosition(567, 490);
     vamp_spox.setPosition(485, 130);
+    resume_p.setColor(Color::White);
+    select_levelp.setColor(Color::White);
+    main_menup.setColor(Color::White);
+    exit2p.setColor(Color::White);
+    options_2p.setColor(Color::White);
+
 
     menu_ingame.loadFromFile("menu_in_game.PNG");
         menu_ingamepox.setTexture(menu_ingame);
@@ -250,91 +257,92 @@ void ubdate() {
             {
                 close_options.setFillColor(Color(0, 0, 0, 130));
                 if (Mouse::isButtonPressed(Mouse::Left))
+                {
                     p = 0;
+                    if (isopesettingsentergame == 0)
+                        e = 0;
+
+                }
 
             }
             else
                 close_options.setFillColor(Color::Transparent);
         }
-        else if (a)
+    }
+    else if (a)
 
+    {
+        Vector2i mor = Mouse::getPosition(window);
+        Vector2f kok = window.mapPixelToCoords(mor);
+        if (back_credit.getGlobalBounds().contains(kok))
         {
-            Vector2i mor = Mouse::getPosition(window);
-            Vector2f kok = window.mapPixelToCoords(mor);
-            if (back_credit.getGlobalBounds().contains(kok))
+            back_credit.setFillColor(Color(0, 0, 0, 130));
+            if (Mouse::isButtonPressed(Mouse::Left))
             {
-                back_credit.setFillColor(Color(0, 0, 0, 130));
-                if (Mouse::isButtonPressed(Mouse::Left))
-                    a = 0;
 
+                e = 1;
+                a = 0;
             }
-            else
-                back_credit.setFillColor(Color::Transparent);
+
         }
         else
+            back_credit.setFillColor(Color::Transparent);
+    }
+    
+    
+        Vector2i mor = Mouse::getPosition(window);
+        Vector2f kok = window.mapPixelToCoords(mor);
+      if (play.getGlobalBounds().contains(kok))
         {
-            Vector2i mor = Mouse::getPosition(window);
-            Vector2f kok = window.mapPixelToCoords(mor);
-            if (play.getGlobalBounds().contains(kok))
+            play.setFillColor(Color(0, 0, 0, 130));
+
+
+            if (Mouse::isButtonPressed(Mouse::Left))
             {
-                play.setFillColor(Color(0, 0, 0, 130));
-
-
-                if (Mouse::isButtonPressed(Mouse::Left))
-                {
-                    rd = 1;
-                    e = 0;
-                }
+                rd = 1;
+                e = 0;
             }
+        }
 
-            else  if (credits.getGlobalBounds().contains(kok))
-            {                                                     ////الصوره بتتغير لما احط  الماوس عليها 
+        else  if (credits.getGlobalBounds().contains(kok))
+        {                                                     ////الصوره بتتغير لما احط  الماوس عليها 
 
-                credits.setFillColor(Color(0, 0, 0, 130));
+            credits.setFillColor(Color(0, 0, 0, 130));
 
-                if (Mouse::isButtonPressed(Mouse::Left))
-                {
-
-                    a = 1;
-                }
-            }
-
-
-            else if (options.getGlobalBounds().contains(kok))
-            {
-                options.setFillColor(Color(0, 0, 0, 130));
-
-                if (Mouse::isButtonPressed(Mouse::Left))
-                {
-                    p = 1;
-                }
-
-
-
-            }
-
-            else    if (exite.getGlobalBounds().contains(kok))
-            {
-                exite.setFillColor(Color(0, 0, 0, 130));
-                if (Mouse::isButtonPressed(Mouse::Left))
-                    window.close();
-
-            }
-
-            else
+            if (Mouse::isButtonPressed(Mouse::Left))
             {
 
-                play.setFillColor(Color::Transparent);
-                credits.setFillColor(Color::Transparent);
-                options.setFillColor(Color::Transparent);
-                exite.setFillColor(Color::Transparent);
-
-
-
+                a = 1;
+                e = 0;
             }
+        }
+
+
+        else if (options.getGlobalBounds().contains(kok))
+        {
+            options.setFillColor(Color(0, 0, 0, 130));
+
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                p = 1;
+            }
+
+
 
         }
-    }
+
+        else    if (exite.getGlobalBounds().contains(kok))
+        {
+            exite.setFillColor(Color(0, 0, 0, 130));
+            if (Mouse::isButtonPressed(Mouse::Left))
+                window.close();
+
+        }
+
+
+    
+
+    
 
     else if (rd)
     {
@@ -369,30 +377,144 @@ void ubdate() {
 
         }
 
-        else
-        {
-            l1.setFillColor(Color::Transparent);
-
-            l2.setFillColor(Color::Transparent);
-            l3.setFillColor(Color::Transparent);
-        }
+      
 
     }
-    if (!e && !rd)
+    else if (!e && !rd)
     {
         if (menu_ingamepox.getGlobalBounds().contains(mousepos))
         {
             menu_ingamepox.setColor(Color(200, 200, 200));
+            menu_ingamepox.setScale(.3, .3);
+   
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 show_menu = 1;
 
+
             }
         }
         else
+        {
             menu_ingamepox.setColor(Color::White);
+            menu_ingamepox.setScale(.25, .25);
+        }
+        if (show_menu) {
+            if (resume_p.getGlobalBounds().contains(mousepos))
+            {
+              
+                select_levelp.setColor(Color::White);
+                    resume_p.setColor(Color(200, 200, 200));
+                    resume_p.setScale(.23, .23);
+                    resume_p.setPosition(560, resume_p.getPosition().y);
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        show_menu = 0;
+                    }
+                
 
+            }
+            else if (select_levelp.getGlobalBounds().contains(mousepos))
+            {
+           
+                resume_p.setColor(Color::White);
+                    select_levelp.setColor(Color(200, 200, 200));
+                    select_levelp.setScale(.23, .23);
+                    select_levelp.setPosition(560, select_levelp.getPosition().y);
+
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        rd = 1;
+                        show_menu = 0;
+                    }
+               
+            }
+            else if (main_menup.getGlobalBounds().contains(mousepos))
+            {
+                if (!resume_p.getGlobalBounds().contains(mousepos))
+                {
+                    main_menup.setColor(Color(200, 200, 200));
+                    main_menup.setScale(.23, .23);
+                    main_menup.setPosition(560, main_menup.getPosition().y);
+
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        e = 1;
+                        show_menu = 0;
+                    }
+                }
+            }
+            else if (exit2p.getGlobalBounds().contains(mousepos))
+            {
+                if (!resume_p.getGlobalBounds().contains(mousepos))
+                {
+                    exit2p.setColor(Color(200, 200, 200));
+                    exit2p.setScale(.23, .23);
+                    exit2p.setPosition(560, exit2p.getPosition().y);
+
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        window.close();
+                        
+                        
+                    }
+                }
+            }
+            else if (options_2p.getGlobalBounds().contains(mousepos))
+            {
+                if (!resume_p.getGlobalBounds().contains(mousepos))
+                {
+                    options_2p.setColor(Color(200, 200, 200));
+                    options_2p.setScale(.23, .23);
+                    options_2p.setPosition(560, options_2p.getPosition().y);
+
+                    if (Mouse::isButtonPressed(Mouse::Left))
+                    {
+                        p = 1;
+                        e = 1;
+                        isopesettingsentergame = 0;
+
+                        
+                        
+                    }
+                }
+            }
+            else
+            {
+                resume_p.setScale(.22, .22);
+                resume_p.setPosition(567, resume_p.getPosition().y);
+                select_levelp.setColor(Color::White);
+                select_levelp.setScale(.22, .22);
+                select_levelp.setPosition(567, select_levelp.getPosition().y);
+                main_menup.setColor(Color::White);
+                main_menup.setScale(.22, .22);
+                main_menup.setPosition(567, main_menup.getPosition().y);
+                exit2p.setColor(Color::White);
+                exit2p.setScale(.22, .22);
+                exit2p.setPosition(567, exit2p.getPosition().y);
+                options_2p.setColor(Color::White);
+                options_2p.setScale(.22, .22);
+                options_2p.setPosition(567, options_2p.getPosition().y);
+            }
+
+        }
     }
+      else
+      {
+
+          play.setFillColor(Color::Transparent);
+          credits.setFillColor(Color::Transparent);
+          options.setFillColor(Color::Transparent);
+          exite.setFillColor(Color::Transparent);
+
+
+
+
+          l1.setFillColor(Color::Transparent);
+
+          l2.setFillColor(Color::Transparent);
+          l3.setFillColor(Color::Transparent);
+        }
     if (Mouse::isButtonPressed(Mouse::Left))
     {
         Vector2i lop = Mouse::getPosition(window);
@@ -414,16 +536,15 @@ void draw() {
 
     if (e)
     {
-        window.draw(menu);
-
-
-        window.draw(play);
-        window.draw(credits);
-        window.draw(options);
-        window.draw(exite);
-
-
-        if (p)
+        if (isopesettingsentergame)
+        {
+            window.draw(menu);
+            window.draw(play);
+            window.draw(credits);
+            window.draw(options);
+            window.draw(exite);
+        }
+     if (p)
         {
 
             dark_window.setFillColor(Color(0, 0, 0, 130));
@@ -437,18 +558,14 @@ void draw() {
             window.draw(sound_c);
             window.draw(musichandpox);
             window.draw(musichandpox2);
-
-
-
-
-
-
         }
         else
             dark_window.setFillColor(Color::Transparent);
 
 
-        if (a)
+
+    }
+    else if (a)
         {
             //dark_window.setFillColor(Color(0, 0, 0, 150));
             window.draw(names_pox);
@@ -456,7 +573,6 @@ void draw() {
 
 
         }
-    }
 
     else if (rd)
     {
@@ -467,9 +583,11 @@ void draw() {
 
 
     }
-    else
+    else 
     {
-        window.draw(menu_ingamepox);
+      
+            window.draw(menu_ingamepox);
+        
         if (show_menu)
         {
             window.draw(vamp_spox);
