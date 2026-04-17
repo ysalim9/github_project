@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="anime.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="player.cpp" />
   </ItemGroup>

@@ -1,10 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\C\u002B\u002B projects\\SFML Template\\",
+  "WorkspaceRootPath": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|E:\\C\u002B\u002B projects\\SFML Template\\ConsoleApplication1\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|solutionrelative:ConsoleApplication1\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|solutionrelative:ConsoleApplication1\\player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{AEAC8384-1F3B-4B46-B595-738C74C38920}|ConsoleApplication1\\ConsoleApplication1.vcxproj|solutionrelative:ConsoleApplication1\\player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,17 +22,41 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "player.h",
+              "DocumentMoniker": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.h",
+              "RelativeDocumentMoniker": "ConsoleApplication1\\player.h",
+              "ToolTip": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.h",
+              "RelativeToolTip": "ConsoleApplication1\\player.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-16T22:16:09.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "player.cpp",
+              "DocumentMoniker": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.cpp",
+              "RelativeDocumentMoniker": "ConsoleApplication1\\player.cpp",
+              "ToolTip": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\player.cpp",
+              "RelativeToolTip": "ConsoleApplication1\\player.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-04-16T22:16:22.626Z"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Main.cpp",
-              "DocumentMoniker": "E:\\C\u002B\u002B projects\\SFML Template\\ConsoleApplication1\\Main.cpp",
+              "DocumentMoniker": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\Main.cpp",
               "RelativeDocumentMoniker": "ConsoleApplication1\\Main.cpp",
-              "ToolTip": "E:\\C\u002B\u002B projects\\SFML Template\\ConsoleApplication1\\Main.cpp",
+              "ToolTip": "C:\\Users\\Mega Store\\OneDrive\\\u0627\u0644\u0645\u0633\u062A\u0646\u062F\u0627\u062A\\GitHub\\github_project\\SFML Template\\ConsoleApplication1\\Main.cpp",
               "RelativeToolTip": "ConsoleApplication1\\Main.cpp",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAACEAAAAPAAAA",
+              "ViewState": "AgIAAAkBAAAAAAAAAAAAACUBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-16T14:21:25.984Z",
               "EditorCaption": ""
