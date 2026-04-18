@@ -1,5 +1,14 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(538,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (ConsoleApplication1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  anime.cpp
-\anime.cpp(1,1): error C1083: Cannot open source file: 'anime.cpp': No such file or directory
-  (compiling source file '/anime.cpp')
+﻿C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.CppBuild.targets(551,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (ConsoleApplication1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Main.cpp
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.h(13,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Main.cpp')
   
+D:\downloads\github_project\SFML Template\ConsoleApplication1\player.h(13,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Main.cpp')
+  
+  player.cpp
+D:\downloads\github_project\SFML Template\ConsoleApplication1\player.h(13,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'player.cpp')
+  
+  Generating Code...
+  ConsoleApplication1.vcxproj -> D:\downloads\github_project\SFML Template\x64\Debug\SFML Template.exe

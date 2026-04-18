@@ -1,356 +1,374 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include <cmath>
+#include <sstream>
+#include <string>
+#include <ctime>
+#include "zombie.h"
 #include "player.h"
+#include <fstream>
+#include <SFML/Audio.hpp>
+#include <iomanip>
+
 using namespace std;
 using namespace sf;
+Character  player;
+Bullet bullet; 
+//----------------------------------shapes and variables-----------------------//
+//int colum = 0;
+View view(sf::FloatRect(0, 0, 1000, 800));
+sf::RenderWindow window(sf::VideoMode(1080, 1050), "Zombies Project - Clean Version");
+
+//RectangleShape copyplayer(Vector2f(124 / 4, 128 / 2));
+//RectangleShape re1(Vector2f(100, 100)), re2(Vector2f(100, 100));
+//RectangleShape gun(Vector2f(25, 10));
+//CircleShape circle(10.f);
+Sprite background;
+Texture texturebacground;
+float dt;
+//Sprite player;
+//Vector2f aimdirection;
+//Texture mario;
+
+//----------------------------------------------guns variables------------------------------------------------------//
+//enum weopan { pistlo, rifle };
+//weopan currentweopon = pistlo;
+//#define pistlofirerate 1.0f
+//#define pistlodamage 25
+//#define riflofirerate 0.5f
+//#define riflodamage 15 
+//
+//float shoottimer = 0;
+//float currentfirerate = pistlofirerate;
+//int currentdamage = pistlodamage;
+//
+//int pistolAmmoLoaded = 8;
+//int rifleAmmoLoaded = 30;
+//float playersdpeed = 300.f;
+//int currentammo = 8;
+//bool isZPressed = false;
+
+//----------------------------------functions prototypes-----------------------------//
 void Start();
-void Update();
 void Draw();
-void PlayerMovement();
-void CalculateAimDirection();
-void PlayerAnimation();
-void Shooting();
-void HandleBullets();
-void collision();
-// --- الإعدادات العامة ---
-RenderWindow window(VideoMode(1440, 900), "Vampire Survivors ");
-View view(Vector2f(0, 0), Vector2f(window.getSize().x, window.getSize().y));
-float deltatime;
-enum Direction { Right, Left, Up, Down };
-Direction aimDir = Right;
-struct bullet {
-    RectangleShape shape;
-    Vector2f velocity;
-    int damage = 25;
-    void update(float dt) {
-        shape.move(velocity * dt);
-    }
-};
+void Update(float dt);
+//----------------------------------bullet structure----------------------//
 
-// --- استركت الشخصية ---
-struct Character {
-    Sprite sprite;
-    float animTimer = 0;
-    bool isdamage = false;
-    bool isdead = false;
-    float damageTimer = 0;
-    int frameCounter = 0;
-    int currant_halthe = 100;
-    Vector2f deathVelocity;
-    bool isMoving = false;
-    bool isDoingAction = false;
-    bool facingRight = true;
 
-    // مصفوفات الصور داخل الاستركت
-    Texture non_R[6], non_L[6];
-    Texture move_R[8], move_L[8];
-    Texture hit_R[7], hit_L[7];
-    Texture hit_up[5], hit_down[5];
-    Texture damage_L[3], damage_R[3];
-    Texture down_L[3], down_R[3];
-    //Texture recall_L[5], recall_R[5];
-    void loadAllTextures() {
-        for (int i = 0; i < 6; i++) {
-            non_L[i].loadFromFile("player/non_L/non_L_frame" + to_string(i) + ".png");
-            non_R[i].loadFromFile("player/non_R/non_R_frame" + to_string(i) + ".png");
-        }
-        for (int i = 0; i < 8; i++) {
-            move_L[i].loadFromFile("player/move_L/move_L_frame" + to_string(i) + ".png");
-            move_R[i].loadFromFile("player/move_R/move_R_frame" + to_string(i) + ".png");
-        }
-        for (int i = 0; i < 7; i++) {
-            hit_L[i].loadFromFile("player/hit_L/hit_L_frame" + to_string(i) + ".png");
-            hit_R[i].loadFromFile("player/hit_R/hit_R_frame" + to_string(i) + ".png");
-        }
-        for (int  i = 0; i < 5; i++)
-        {
-            hit_up[i].loadFromFile("player/hit_up/hit_up_frame" + to_string(i) + ".png");
-            hit_down[i].loadFromFile("player/hit_down/hit_up_frame" + to_string(i) + ".png");
-            //recall_R[i].loadFromFile("player/recall_R/recall_R_frame" + to_string(i) + ".png");
-           // recall_L[i].loadFromFile("player/recall_L/recall_L_frame" + to_string(i) + ".png");
-        }
-        for (int i = 0; i < 3; i++) {
-            damage_L[i].loadFromFile("player/damage_L/damage_L_frame" + to_string(i) + ".png");
-            damage_R[i].loadFromFile("player/damage_R/damage_R_frame" + to_string(i) + ".png");
-            down_L[i].loadFromFile("player/down_L/down_L_frame"+ to_string(i)+ ".png");
-            down_R[i].loadFromFile("player/down_R/down_R_frame" + to_string(i) + ".png");
 
-        }   
-    }
-};
-// --- المتغيرات العالمية ---
-Character playerObj;
-RectangleShape playerCollider(Vector2f(128 / 4, 128 / 2));
-RectangleShape circle(Vector2f(100.f,60.f));   // شكل تجريبي
-Sprite background, effectGun;
-vector<bullet> bullets;
-Texture backgroundTex;//effect_L[2], effect_R[2];
-//bool showEffect = false;
-//float effectTimer = 0;
-// --- تعريف الدوال ---
-void Start() {
-    playerObj.loadAllTextures();
-    playerObj.sprite.setOrigin(512 / 2, 512 / 2);
-    playerObj.sprite.setPosition(720, 450);
-    playerCollider.setOrigin(playerCollider.getSize().x / 2, playerCollider.getSize().y / 2);
-    playerCollider.setSize(Vector2f(45.f, 70.f));
-    playerCollider.setOutlineColor(Color::Green);
-        playerCollider.setOutlineThickness(2);
-    playerCollider.setFillColor(Color::Transparent);
-    /*for (int i = 0; i < 2; i++) {
-        effect_R[i].loadFromFile("effect_gun_R/effect_R_frame" + to_string(i) + ".png");
-        effect_L[i].loadFromFile("effect_gun_L/effect_L_frame" + to_string(i) + ".png");
-    }*/
-
-    if (backgroundTex.loadFromFile("background2.png")) {
-        backgroundTex.setRepeated(true);
-        background.setTexture(backgroundTex);
-        background.setTextureRect(IntRect(0, 0, 20000, 20000));
-        background.setPosition(-10000, -10000);
-    }
-    effectGun.setOrigin(512 / 2, 512 / 2);
-}
-
-void PlayerMovement() {
-    if (playerObj.isdead) return;
-    float speed = 400.0f;
-    playerObj.isMoving = false;
-    if (playerObj.isDoingAction||playerObj.isdamage) return;
-
-    if (Keyboard::isKeyPressed(Keyboard::Up)) { playerObj.sprite.move(0, -speed * deltatime); playerObj.isMoving = true; }
-    if (Keyboard::isKeyPressed(Keyboard::Down)) { playerObj.sprite.move(0, speed * deltatime);  playerObj.isMoving = true; }
-    if (Keyboard::isKeyPressed(Keyboard::Right)) { playerObj.sprite.move(speed * deltatime, 0);  playerObj.isMoving = true; }
-    if (Keyboard::isKeyPressed(Keyboard::Left)) { playerObj.sprite.move(-speed * deltatime, 0); playerObj.isMoving = true; }
-}
-
-void CalculateAimDirection() {
-    if (playerObj.isdead) return;
-    Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-    Vector2f playerPos = playerObj.sprite.getPosition();
-
-    float dx = mousePos.x - playerPos.x;
-    float dy = mousePos.y - playerPos.y;
-    if (abs(dx) > abs(dy)) {
-        aimDir = (dx > 0) ? Right : Left;
-        playerObj.facingRight = (dx > 0);
-    }
-    else {
-        aimDir = (dy > 0) ? Down : Up;
-    }
-}
-
-void PlayerAnimation() {
-    playerObj.animTimer += deltatime;
-    if (playerObj.animTimer >= 0.1f) {
-        playerObj.animTimer = 0;
-        playerObj.frameCounter++;
-    }
-
-    if (playerObj.currant_halthe <= 0)
-    {
-        playerObj.isdead = true;
-        int deathFrame = playerObj.frameCounter;
-        if (deathFrame > 2) deathFrame = 2;
-        playerObj.sprite.setColor(Color::White);
-        if (playerObj.facingRight)
-            playerObj.sprite.setTexture(playerObj.down_R[deathFrame]);
-        else
-            playerObj.sprite.setTexture(playerObj.down_L[deathFrame]);
-        return;
-    }
-       else if (playerObj.isdamage)
-    {
-        playerObj.frameCounter %= 2;
-        playerObj.sprite.setColor(Color(255, 100, 100));
-        if (playerObj.facingRight)
-            playerObj.sprite.setTexture(playerObj.damage_R[playerObj.frameCounter]); 
-        else
-         playerObj.sprite.setTexture(playerObj.damage_L[playerObj.frameCounter]);
-        playerObj.damageTimer += deltatime;
-        if (playerObj.damageTimer >= 0.4f) {
-            playerObj.isdamage = false;
-            playerObj.sprite.setColor(Color::White);
-        }
-    }
-     else if (playerObj.isDoingAction) {
-        if (aimDir == Up) {
-            playerObj.frameCounter %= 5;
-            playerObj.sprite.setTexture(playerObj.hit_up[playerObj.frameCounter], true);
-            if (playerObj.frameCounter == 4) playerObj.isDoingAction = false;
-        }
-        else if (aimDir == Down) {
-            playerObj.frameCounter %= 5;
-            playerObj.sprite.setTexture(playerObj.hit_down[playerObj.frameCounter], true);
-            if (playerObj.frameCounter == 4) playerObj.isDoingAction = false;
-        }
-        else { // يمين أو شمال
-            playerObj.frameCounter %= 7;
-            playerObj.sprite.setTexture(playerObj.facingRight ? playerObj.hit_R[playerObj.frameCounter] : playerObj.hit_L[playerObj.frameCounter], true);
-            if (playerObj.frameCounter == 6) playerObj.isDoingAction = false;
-        }
-    }
-    else if (playerObj.isMoving) {
-        playerObj.frameCounter %= 8;
-        playerObj.sprite.setTexture(playerObj.facingRight ? playerObj.move_R[playerObj.frameCounter] : playerObj.move_L[playerObj.frameCounter]);
-    }
-    else {
-        playerObj.frameCounter %= 6;
-        playerObj.sprite.setTexture(playerObj.facingRight ? playerObj.non_R[playerObj.frameCounter] : playerObj.non_L[playerObj.frameCounter]);
-    }
-}
-
-void Shooting() {
-
-    if (playerObj.isdead) return;
-    if (Mouse::isButtonPressed(Mouse::Left) && !playerObj.isDoingAction) {
-        playerObj.isDoingAction = true;
-        playerObj.frameCounter = 0;
-        playerObj.animTimer = 0;
-       // effectTimer = 0;
-    }
-
-    static bool fired = false;
-    if (playerObj.isDoingAction && playerObj.frameCounter == 3 && !fired) {
-        float baseAngle = 0;
-        if (aimDir == Right) baseAngle = 0.f;
-        else if (aimDir == Left) baseAngle = 180.f;
-        else if (aimDir == Up) baseAngle = 270.f;
-        else if (aimDir == Down) baseAngle = 90.f;
-        float spread[] = { 0.f, -5.f, 5.f, 7.f, -7.f };
-        for (int i = 0; i < 5; i++) {
-            bullet b;
-            b.shape.setSize(Vector2f(10, 5));
-            b.shape.setFillColor(Color::Yellow);
-            b.shape.setOrigin(5, 2.5f);
-            b.shape.setPosition(playerObj.sprite.getPosition().x, playerObj.sprite.getPosition().y - 40);
-
-            float rad = (baseAngle + spread[i]) * 3.14159f / 180.f;
-            b.velocity = Vector2f(cos(rad) * 800.f, sin(rad) * 800.f);
-            b.shape.setRotation(baseAngle + spread[i]);
-            bullets.push_back(b);
-        }
-        fired = true;
-       // showEffect = true;
-    }
-    if (!playerObj.isDoingAction) fired = false;
-}
-
-void HandleBullets() {
-    for (size_t i = 0; i < bullets.size(); i++) {
-        bullets[i].update(deltatime);
-        // مسح الرصاص البعيد
-        if (abs(bullets[i].shape.getPosition().x) > 20000) { bullets.erase(bullets.begin() + i); i--; }
-    }
-    }
-
-void Update() {
-    Vector2f targetPos = playerObj.sprite.getPosition();
-    view.setCenter(view.getCenter() + (targetPos - view.getCenter()) * 0.1f);
-    window.setView(view);
-
-    PlayerMovement();
-    CalculateAimDirection();
-    PlayerAnimation();
-    Shooting();
-    HandleBullets();
-    // تحديث مكان الكوليدر ليكون في منتصف اللاعب بالضبط
-    playerCollider.setPosition(playerObj.sprite.getPosition().x,
-        playerObj.sprite.getPosition().y-35.f);
-    collision();
-    if (playerObj.isdead)
-    {
-        playerObj.sprite.move(playerObj.deathVelocity * deltatime);
-        playerObj.deathVelocity.x *= 0.98f;
-        playerObj.deathVelocity.y *= 0.98f;
-        if (playerObj.deathVelocity.x<.1f)
-         playerObj.deathVelocity.x = 0;
-    }
-  /*  if (showEffect) {
-        float offset = playerObj.facingRight ? 40.0f : -40.0f;
-        effectGun.setPosition(playerObj.sprite.getPosition().x - offset, playerObj.sprite.getPosition().y - 10);
-        effectTimer += deltatime;
-        int frame = (effectTimer < 0.05f) ? 0 : 1;
-        effectGun.setTexture(playerObj.facingRight ? effect_R[frame] : effect_L[frame]);
-        if (effectTimer >= 0.1f) showEffect = false;
-    }*/
-}
-
-void Draw() {
-    window.clear();
-    window.draw(background);
-    window.draw(circle);
-    //window.draw(playerCollider);
-    for (int i = 0;i<bullets.size();i++) window.draw(bullets[i].shape);
-    window.draw(playerObj.sprite);
-    //if (showEffect) window.draw(effectGun);
-    window.display();
-}
+//---------------------------------zombie structure----------------------------------//
+//Vector2f normalize(Vector2f vector) {
+//    float mag = sqrt(pow(vector.x, 2) + pow(vector.y, 2));
+//    if (mag == 0) return Vector2f(0, 0);
+//    return Vector2f(vector.x / mag, vector.y / mag);
+//}
+//
+//float Distance(Vector2f v1, Vector2f v2) {
+//    return sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
+//}
+//
+//Texture zombiespreite;
+//Texture zombiespreite2;
+//struct zombie {
+//    Sprite shape;
+//    RectangleShape attackbox;
+//    Vector2f velocity;
+//    int health = 100;
+//    float deathTimer = 0.0f;
+//    float deathDuration = 1.2f;
+//    float animTimer = 0;
+//    float animSwitch = 0.1f;
+//    float speed = 5;
+//    int animationrow = 2;
+//    int animationcol = 0;
+//    int scale = 2;
+//    float attackcounter = 0;
+//    float attacktime = 1;
+//    bool isattacking = false;
+//    bool isdead = false;
+//
+//    void Startzombie() {
+//        shape.setTexture(zombiespreite);
+//        shape.setTextureRect(IntRect(0, 2 * 32, 32, 32));
+//        attackbox.setSize(Vector2f(50, 50));
+//        attackbox.setOrigin(attackbox.getLocalBounds().width / 2, attackbox.getLocalBounds().height / 2);
+//        shape.setOrigin(32 / 2, 32 / 2);
+//        shape.setScale(scale, scale);
+//    }
+//
+//    void caluclatngmovementdirection(Vector2f playerPos) {
+//        velocity = playerPos - shape.getPosition();
+//        velocity = normalize(velocity) * speed;
+//    }
+//
+//    void ainmationhamdler() {
+//        animTimer += deltaTime;
+//        if (animTimer >= animSwitch) {
+//            animTimer = 0;
+//            if (isdead) {
+//                animationrow = 3;
+//                if (animationcol < 12) animationcol++;
+//                else animationcol = 12;
+//            }
+//            else if (isattacking) {
+//                animationrow = 1;
+//                animationcol = (animationcol + 1) % 7;
+//            }
+//            else {
+//                animationrow = 2;
+//                animationcol = (animationcol + 1) % 8;
+//            }
+//            shape.setTextureRect(IntRect(animationcol * 32, animationrow * 32, 32, 32));
+//
+//            if (shape.getPosition().x > player.getPosition().x) shape.setScale(-scale, scale);
+//            else shape.setScale(scale, scale);
+//        }
+//    }
+//
+//    void attackplayer(FloatRect playerBounds) {
+//        if (attackbox.getGlobalBounds().intersects(playerBounds)) {
+//            isattacking = true;
+//            attackcounter += deltaTime;
+//            if (attackcounter >= attacktime) {
+//                attackcounter = 0;
+//                cout << "hit player!" << endl;
+//            }
+//        }
+//        else isattacking = false;
+//    }
+//};
+//vector<zombie> zombielist;
+//vector<zombie> zombielist2;
 
 int main() {
+    srand(static_cast<unsigned>(time(0)));
     Start();
     Clock clock;
     while (window.isOpen()) {
-        deltatime = clock.restart().asSeconds();
-        Event event;
+        dt = clock.restart().asSeconds();
+        sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) window.close();
+            if (event.type == sf::Event::Closed)
+                window.close();
         }
-        Update();
+        Update(dt); 
         Draw();
     }
     return 0;
 }
 
-void collision() {
-    if (playerObj.isdead) return;
-    // استخدمنا الكوليدر الصغير بدل الصورة الكبيرة
-    FloatRect playerBounds = playerCollider.getGlobalBounds();
-    FloatRect circleBounds = circle.getGlobalBounds();
-    FloatRect overlap;
+void Start() {
+    //zombiespreite.loadFromFile("zombie.png");
+    ////zombiespreite2.loadFromFile("zombie2.png");
+    //mario.loadFromFile("mario.png");
+    //player.setTexture(mario);
+    //player.setTextureRect(IntRect(44, 2 * 62, 44, 62));
+    //player.setPosition(205, 205);
+    //player.setScale(1, 1);
+    //player.setOrigin(player.getLocalBounds().width / 2, player.getLocalBounds().height / 2);
+    //gun.setOrigin((gun.getLocalBounds().width / 2) - 100, gun.getLocalBounds().height / 2);
+    //circle.setOrigin(circle.getLocalBounds().width / 2, circle.getLocalBounds().height / 2);
+    //re1.setPosition(1000, 250);
+    //re2.setPosition(250, 250);
 
-    if (playerBounds.intersects(circleBounds, overlap)) {
-        if (!playerObj.isdamage) {
-
-               playerObj.currant_halthe -= 10;
-              playerObj.frameCounter = 0;
-              playerObj.damageTimer = 0;
-         cout << "Player Health: " << playerObj.currant_halthe << endl;
-          if (playerObj.currant_halthe <= 0)
-            {
-                float direction = (playerObj.sprite.getPosition().x > circle.getPosition().x) ? 1.f : -1.f;
-                playerObj.deathVelocity = Vector2f(direction * 500.f, 0);
-                playerObj.isdead = true;
-            }
-          else {
-              playerObj.sprite.setColor(Color(255, 100, 100));
-                playerObj.isdamage = true;
-                float Knockback = 20.f;
-                if (playerObj.facingRight)
-                    playerObj.sprite.move(-Knockback, 0);
-                else
-                    playerObj.sprite.move(Knockback, 0);
-            }
-        }
-    /*    if (overlap.width < overlap.height) {
-            if (playerBounds.left < circleBounds.left)
-                playerObj.sprite.move(-overlap.width, 0);
-            else
-                playerObj.sprite.move(overlap.width, 0);
-        }
-        else {
-            if (playerBounds.top < circleBounds.top)
-                playerObj.sprite.move(0, -overlap.height);
-            else
-                playerObj.sprite.move(0, overlap.height);
-        }*/
+    window.setMouseCursorVisible(false);
+    //copyplayer.setOrigin(copyplayer.getLocalBounds().width / 2, copyplayer.getLocalBounds().height / 2);
+    player.Startplayer();
+    if (texturebacground.loadFromFile("background2.png")) {
+        texturebacground.setRepeated(true);
+        background.setTexture(texturebacground);
+        background.setTextureRect(IntRect(0, 0, 1000, 800));
+        background.setOrigin(500, 400);
     }
+}
 
-    for (int i = 0; i < bullets.size(); i++) {
-        if (circle.getGlobalBounds().intersects(bullets[i].shape.getGlobalBounds())) {
-            bullets.erase(bullets.begin() + i);
-            i--;
-        }
-    }
+void Update(float dt) {
+    player.Updateplayer(dt, window);
+    bullet.bullethandling(dt);
+    view.setCenter(player.players.getPosition());
+    background.setPosition(player.players.getPosition());
+    int mapx = static_cast<int>(player.players.getPosition().x);
+    int mapy = static_cast<int>(player.players.getPosition().y);
+    background.setTextureRect(IntRect(mapx, mapy, 1000, 800));
+
+    //playermovement();
+    //calculuting();
+    //shooting();
+    //bullethandling();
+    //zombiehandling();
+    //playercollieer();
+    //switchwepoans();
+    //reload();
+    //addzombie();
+    //playeranimation();
+}
+
+//void playermovement() {
+//    up = false; down = false; a = false; d = false;
+//    if (Keyboard::isKeyPressed(Keyboard::W)) { player.move(0, -playersdpeed * deltaTime); up = true; }
+//    if (Keyboard::isKeyPressed(Keyboard::S)) { player.move(0, playersdpeed * deltaTime); down = true; }
+//    if (Keyboard::isKeyPressed(Keyboard::D)) { player.move(playersdpeed * deltaTime, 0); d = true; }
+//    if (Keyboard::isKeyPressed(Keyboard::A)) { player.move(-playersdpeed * deltaTime, 0); a = true; }
+//}
+
+    //void playeranimation() {
+    //    if (up) { colum = (colum + 1) % 12; player.setTextureRect(IntRect(colum * 44, 3 * 62, 44, 62)); }
+    //    else if (down) { colum = (colum + 1) % 12; player.setTextureRect(IntRect(colum * 44, 0 * 62, 44, 62)); }
+    //    else if (d) { colum = (colum + 1) % 12; player.setTextureRect(IntRect(colum * 44, 2 * 62, 44, 62)); }
+    //    else if (a) { colum = (colum + 1) % 12; player.setTextureRect(IntRect((colum + 1) * 44, 1 * 62, -44, 62)); }
+    //}
+
+//void playercollieer() {
+//
+//    if (copyplayer.getGlobalBounds().intersects(re2.getGlobalBounds())) {
+//        if (Keyboard::isKeyPressed(Keyboard::W)) player.move(0, playersdpeed * deltaTime);
+//        if (Keyboard::isKeyPressed(Keyboard::S)) player.move(0, -playersdpeed * deltaTime);
+//        if (Keyboard::isKeyPressed(Keyboard::D)) player.move(-playersdpeed * deltaTime, 0);
+//        if (Keyboard::isKeyPressed(Keyboard::A)) player.move(playersdpeed * deltaTime, 0);
+//    }
+//
+//
+//    for (int i = 0; i < bullets.size(); i++) {
+//        bool bulletRemoved = false;
+//
+//
+//        if (bullets[i].shape.getGlobalBounds().intersects(re2.getGlobalBounds())) {
+//            bullets.erase(bullets.begin() + i);
+//            i--;
+//            continue;
+//        }
+//
+//        for (int j = 0; j < zombielist.size(); j++) {
+//            if (!zombielist[j].isdead && bullets[i].shape.getGlobalBounds().intersects(zombielist[j].shape.getGlobalBounds())) {
+//                zombielist[j].health -= bullets[i].damage;
+//                bullets.erase(bullets.begin() + i);
+//                i--;
+//                bulletRemoved = true;
+//                break;
+//            }
+//        }
+//    }
+//}
+
+//void calculuting() {
+//    Vector2i mouseposscreen = Mouse::getPosition(window);
+//    Vector2f mouseworldposition = window.mapPixelToCoords(mouseposscreen);
+//    circle.setPosition(mouseworldposition);
+//    aimdirection = mouseworldposition - player.getPosition();
+//    gun.setRotation(atan2(aimdirection.y, aimdirection.x) * 180 / 3.14159f);
+//    aimdirection = normalize(aimdirection);
+//    gun.setPosition(player.getPosition());
+//    copyplayer.setPosition(player.getPosition());
+//}
+
+//void shooting() {
+//    shoottimer += deltaTime;
+//    if (Mouse::isButtonPressed(Mouse::Left) && shoottimer >= currentfirerate && currentammo > 0) {
+//        shoottimer = 0;
+//        currentammo--;
+//        if (currentweopon == pistlo) pistolAmmoLoaded = currentammo;
+//        else rifleAmmoLoaded = currentammo;
+//
+//        Bullet newbullet;
+//        newbullet.shape.setSize(Vector2f(10, 5));
+//        newbullet.shape.setFillColor(Color::Cyan);
+//        newbullet.shape.setPosition(gun.getPosition());
+//        newbullet.shape.setRotation(gun.getRotation());
+//        newbullet.damage = currentdamage;
+//        newbullet.velocity = aimdirection * 800.0f;
+//        bullets.push_back(newbullet);
+//    }
+//}
+//
+//void bullethandling() {
+//    for (int i = 0; i < bullets.size(); i++) bullets[i].Update(deltaTime);
+//}
+
+//void zombiehandling() {
+//    float personalSpace = 50.0f;
+//    float separationStrength = 40.0f;
+//
+//    for (int i = 0; i < (int)zombielist.size(); i++) {
+//        if (zombielist[i].health <= 0 && !zombielist[i].isdead) {
+//            zombielist[i].isdead = true;
+//            zombielist[i].speed = 0;
+//        }
+//
+//        if (zombielist[i].isdead) {
+//            zombielist[i].deathTimer += deltaTime;
+//            zombielist[i].ainmationhamdler();
+//            if (zombielist[i].deathTimer >= zombielist[i].deathDuration) {
+//                zombielist.erase(zombielist.begin() + i);
+//                i--;
+//            }
+//            continue;
+//        }
+//
+//        zombielist[i].caluclatngmovementdirection(player.getPosition());
+//
+//        Vector2f separationforce(0.0f, 0.0f);
+//        for (int j = 0; j < zombielist.size(); j++) {
+//            if (i == j || zombielist[j].isdead) continue;
+//            float dist = Distance(zombielist[i].shape.getPosition(), zombielist[j].shape.getPosition());
+//            if (dist < personalSpace && dist > 0) {
+//                separationforce += (zombielist[i].shape.getPosition() - zombielist[j].shape.getPosition()) / dist;
+//            }
+//        }
+//
+//        zombielist[i].velocity = normalize(zombielist[i].velocity + separationforce * separationStrength) * zombielist[i].speed;
+//        zombielist[i].attackplayer(copyplayer.getGlobalBounds());
+//        zombielist[i].ainmationhamdler();
+//        zombielist[i].shape.move(zombielist[i].velocity * (deltaTime * 20.f));
+//        zombielist[i].attackbox.setPosition(zombielist[i].shape.getPosition());
+//    }
+//}
+
+//void spawnzombie(int count) {
+//    for (int i = 0; i < count; i++) {
+//        zombie newzombie;
+//        newzombie.Startzombie();
+//        float offsetx = (rand() % 1000) - 500;
+//        float offsety = (rand() % 1000) - 500;
+//        newzombie.shape.setPosition(player.getPosition().x + offsetx, player.getPosition().y + offsety);
+//        zombielist.push_back(newzombie);
+//    }
+//}
+
+//void addzombie() {
+//    if (Keyboard::isKeyPressed(Keyboard::Z)) {
+//        if (!isZPressed) { spawnzombie(5); isZPressed = true; }
+//    }
+//    else isZPressed = false;
+//}
+
+//void switchwepoans() {
+//    if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+//        currentweopon = pistlo; currentfirerate = pistlofirerate; currentdamage = pistlodamage; currentammo = pistolAmmoLoaded;
+//    }
+//    if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+//        currentweopon = rifle; currentfirerate = riflofirerate; currentdamage = riflodamage; currentammo = rifleAmmoLoaded;
+//    }
+//}
+//
+//void reload() {
+//    if (Keyboard::isKeyPressed(Keyboard::R)) {
+//        if (currentweopon == pistlo) { pistolAmmoLoaded = 8; currentammo = 8; }
+//        else { rifleAmmoLoaded = 30; currentammo = 30; }
+//        cout << "reloading..." << endl;
+//    }
+//}
+
+void Draw() {
+    window.clear();
+    window.draw(background);
+    window.setView(view);
+    player.Drawplayer(window);
+    //window.draw(re1);
+    //window.draw(re2);
+    //for (auto& b : bullets) window.draw(b.shape);
+    //window.draw(player);
+    //window.draw(circle);
+    //window.draw(gun);
+    //for (auto& z : zombielist) window.draw(z.shape);
+    window.display();
 }
