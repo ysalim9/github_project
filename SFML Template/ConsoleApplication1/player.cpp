@@ -7,7 +7,7 @@ RectangleShape re1, re2, gun;
 CircleShape circle;
 Sprite spriteofplayer; 
 Texture mario;
-
+//----------------------------------varabiles---------------------------------//
 bool up = false, down = false, a = false, d = false;
 int colum = 0;
 Vector2f aimdirection;
@@ -76,7 +76,7 @@ void Character::playercollieer( ) {
             continue;
         }
         for (int j = 0; j < zombielist.size(); j++) {
-            if (!zombielist[j].isdead && bullets[i].shape.getGlobalBounds().intersects(zombielist[j].shape.getGlobalBounds())) {
+            if (!zombielist[j].isdead && bullets[i].shape.getGlobalBounds().intersects(zombielist[j].attackbox.getGlobalBounds())) {
                 zombielist[j].health -= bullets[i].damage;
                 bullets.erase(bullets.begin() + i);
                 i--;

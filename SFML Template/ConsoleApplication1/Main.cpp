@@ -67,6 +67,6 @@ void Draw() {
     window.draw(background);
     window.setView(view);
     player.Drawplayer(window);
-    for (auto& z : zombielist)window.draw(z.shape);
+    for (auto& z : zombielist)window.draw(z.shape);//draw zombie ; 
     window.display();
 }

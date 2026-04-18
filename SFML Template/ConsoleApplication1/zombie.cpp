@@ -1,9 +1,10 @@
 #include "zombie.h"
 #include "player.h"
 #include <iostream>
+using namespace std;
+using namespace sf;
 vector<Zombie> zombielist;
 Texture zombiespreite;
-
 void Zombie::Startzombie() {
         shape.setTexture(zombiespreite);
         shape.setTextureRect(IntRect(0, 2 * 32, 32, 32));
@@ -40,6 +41,7 @@ void Zombie::ainmationhamdler() {
         }
 }
 void Zombie::attack_player(FloatRect playerBounds) {
+    //FloatRect playerbounds = copyplayer.getGlobalBounds();
             if (attackbox.getGlobalBounds().intersects(playerBounds)) {
             isattacking = true;
             attackcounter += dt;
@@ -75,24 +77,34 @@ void Zombie::zombiehandling() {
             zombielist[i].deathTimer += dt;
             zombielist[i].ainmationhamdler();
             if (zombielist[i].deathTimer >= zombielist[i].deathDuration) {
+                spawnzombie(2);
                 zombielist.erase(zombielist.begin() + i);
                 i--;
             }
             continue;
         }
 
-        zombielist[i].caluclatngmovementdirection(copyplayer.getPosition());
+        zombielist[i].attack_player(copyplayer.getGlobalBounds());
+        if (!zombielist[i].isattacking)
+        {
+            zombielist[i].caluclatngmovementdirection(copyplayer.getPosition());
 
-        Vector2f separationforce(0.0f, 0.0f);
-        for (int j = 0; j < zombielist.size(); j++) {
-            if (i == j || zombielist[j].isdead) continue;
-            float dist = Distance(zombielist[i].shape.getPosition(), zombielist[j].shape.getPosition());
-            if (dist < personalSpace && dist > 0) {
-                separationforce += (zombielist[i].shape.getPosition() - zombielist[j].shape.getPosition()) / dist;
+
+            Vector2f separationforce(0.0f, 0.0f);
+            for (int j = 0; j < zombielist.size(); j++) {
+                if (i == j || zombielist[j].isdead) continue;
+                float dist = Distance(zombielist[i].shape.getPosition(), zombielist[j].shape.getPosition());
+                if (dist < personalSpace && dist > 0) {
+                    separationforce += (zombielist[i].shape.getPosition() - zombielist[j].shape.getPosition()) / dist;
+                }
             }
-        }
-
         zombielist[i].velocity = normalize(zombielist[i].velocity + separationforce * separationStrength) * zombielist[i].speed;
+        }
+        else
+        {
+            zombielist[i].isattacking = true; 
+            zombielist[i].velocity = Vector2f(0.f, 0.f);
+        }
         zombielist[i].attack_player(copyplayer.getGlobalBounds());
         zombielist[i].ainmationhamdler();
         zombielist[i].shape.move(zombielist[i].velocity * (dt * 20.f));
