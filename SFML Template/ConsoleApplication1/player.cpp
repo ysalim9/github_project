@@ -1,9 +1,11 @@
 #include "player.h"
 #include <iostream>
+
 vector<Bullet> bullets;
 RectangleShape copyplayer;
 RectangleShape re1, re2, gun;
 CircleShape circle;
+Sprite spriteofplayer; 
 Texture mario;
 
 bool up = false, down = false, a = false, d = false;
@@ -19,14 +21,17 @@ int rifleAmmoLoaded = 30;
 int currentammo = 8;
 bool isZPressed = false;
 void Character:: Startplayer() {
+    circle.setRadius(10.f); 
+    circle.setFillColor(Color::Red); 
+    circle.setOrigin(10.f, 10.f);
     if (!mario.loadFromFile("player character/mario.png")) {
         std::cout << "Error loading mario.png" << std::endl;
     }
-    players.setTexture(mario);
-    players.setTextureRect(IntRect(44, 2 * 62, 44, 62));
-    players.setPosition(205, 205);
-    players.setScale(1, 1);
-    players.setOrigin(players.getLocalBounds().width / 2, players.getLocalBounds().height / 2);
+    spriteofplayer.setTexture(mario);
+    spriteofplayer.setTextureRect(IntRect(44, 2 * 62, 44, 62));
+    spriteofplayer.setPosition(205, 205);
+    spriteofplayer.setScale(1, 1);
+    spriteofplayer.setOrigin(spriteofplayer.getLocalBounds().width / 2, spriteofplayer.getLocalBounds().height / 2);
     gun.setOrigin((gun.getLocalBounds().width / 2) - 100, gun.getLocalBounds().height / 2);
     circle.setOrigin(circle.getLocalBounds().width / 2, circle.getLocalBounds().height / 2);
     re1.setPosition(1000, 250);
@@ -35,29 +40,29 @@ void Character:: Startplayer() {
 
 }
 
-void Character::playermovement(float deltatimeplayermovement) {
+void Character::playermovement() {
     up = false, down = false, a = false, d = false;
-    if (Keyboard::isKeyPressed(Keyboard::W)) { players.move(0, -playersdpeed * deltatimeplayermovement); up = true; }
-    if (Keyboard::isKeyPressed(Keyboard::S)) { players.move(0, playersdpeed * deltatimeplayermovement); down = true; }
-    if (Keyboard::isKeyPressed(Keyboard::D)) { players.move(playersdpeed * deltatimeplayermovement, 0); d = true; }
-    if (Keyboard::isKeyPressed(Keyboard::A)) { players.move(-playersdpeed * deltatimeplayermovement, 0); a = true; }
+    if (Keyboard::isKeyPressed(Keyboard::W)) { spriteofplayer.move(0, -playersdpeed * dt); up = true; }
+    if (Keyboard::isKeyPressed(Keyboard::S)) { spriteofplayer.move(0, playersdpeed * dt); down = true; }
+    if (Keyboard::isKeyPressed(Keyboard::D)) { spriteofplayer.move(playersdpeed * dt, 0); d = true; }
+    if (Keyboard::isKeyPressed(Keyboard::A)) { spriteofplayer.move(-playersdpeed * dt, 0); a = true; }
 }
 
 
 void Character:: playeranimation() {
-    if (up) { colum = (colum + 1) % 12; players.setTextureRect(IntRect(colum * 44, 3 * 62, 44, 62)); }
-    else if (down) { colum = (colum + 1) % 12; players.setTextureRect(IntRect(colum * 44, 0 * 62, 44, 62)); }
-    else if (d) { colum = (colum + 1) % 12; players.setTextureRect(IntRect(colum * 44, 2 * 62, 44, 62)); }
-    else if (a) { colum = (colum + 1) % 12; players.setTextureRect(IntRect((colum + 1) * 44, 1 * 62, -44, 62)); }
+    if (up) { colum = (colum + 1) % 12;spriteofplayer.setTextureRect(IntRect(colum * 44, 3 * 62, 44, 62)); }
+    else if (down) { colum = (colum + 1) % 12; spriteofplayer.setTextureRect(IntRect(colum * 44, 0 * 62, 44, 62)); }
+    else if (d) { colum = (colum + 1) % 12; spriteofplayer.setTextureRect(IntRect(colum * 44, 2 * 62, 44, 62)); }
+    else if (a) { colum = (colum + 1) % 12; spriteofplayer.setTextureRect(IntRect((colum + 1) * 44, 1 * 62, -44, 62)); }
 }
   
-void Character::playercollieer( float deltaTimeplayercollieer) {
+void Character::playercollieer( ) {
 
     if (copyplayer.getGlobalBounds().intersects(re2.getGlobalBounds())) {
-        if (Keyboard::isKeyPressed(Keyboard::W)) players.move(0, playersdpeed * deltaTimeplayercollieer);
-        if (Keyboard::isKeyPressed(Keyboard::S)) players.move(0, -playersdpeed * deltaTimeplayercollieer);
-        if (Keyboard::isKeyPressed(Keyboard::D)) players.move(-playersdpeed * deltaTimeplayercollieer, 0);
-        if (Keyboard::isKeyPressed(Keyboard::A)) players.move(playersdpeed * deltaTimeplayercollieer, 0);
+        if (Keyboard::isKeyPressed(Keyboard::W)) spriteofplayer.move(0, playersdpeed * dt);
+        if (Keyboard::isKeyPressed(Keyboard::S)) spriteofplayer.move(0, -playersdpeed * dt);
+        if (Keyboard::isKeyPressed(Keyboard::D)) spriteofplayer.move(-playersdpeed * dt, 0);
+        if (Keyboard::isKeyPressed(Keyboard::A)) spriteofplayer.move(playersdpeed * dt, 0);
     }
 
 
@@ -70,19 +75,29 @@ void Character::playercollieer( float deltaTimeplayercollieer) {
             i--;
             continue;
         }
+        for (int j = 0; j < zombielist.size(); j++) {
+            if (!zombielist[j].isdead && bullets[i].shape.getGlobalBounds().intersects(zombielist[j].shape.getGlobalBounds())) {
+                zombielist[j].health -= bullets[i].damage;
+                bullets.erase(bullets.begin() + i);
+                i--;
+                bulletRemoved = true;
+                break;
+            }
+        }
     }
+    
 }
 void Character:: calculuting(RenderWindow& window) {
     Vector2i mouseposscreen = Mouse::getPosition(window);
     Vector2f mouseworldposition = window.mapPixelToCoords(mouseposscreen);
     circle.setPosition(mouseworldposition);
-    aimdirection = normalize(mouseworldposition - players.getPosition());
+    aimdirection = normalize(mouseworldposition - spriteofplayer.getPosition());
     gun.setRotation(atan2(aimdirection.y, aimdirection.x) * 180 / 3.14159f);
-    gun.setPosition(players.getPosition());
-    copyplayer.setPosition(players.getPosition());
+    gun.setPosition(spriteofplayer.getPosition());
+    copyplayer.setPosition(spriteofplayer.getPosition());
 }
-void shooting(float deltaTimeshooting) {
-    shoottimer += deltaTimeshooting;
+void Character:: shooting() {
+    shoottimer += dt;
     if (Mouse::isButtonPressed(Mouse::Left) && shoottimer >= currentfirerate && currentammo > 0) {
         shoottimer = 0;
         currentammo--;
@@ -99,11 +114,11 @@ void shooting(float deltaTimeshooting) {
         bullets.push_back(newbullet);
     }
 }
-void Bullet::bullethandling(float dt) {
+void Bullet::bullethandling() {
     for (int i = 0; i < bullets.size(); i++)
         bullets[i].updatebullet(dt);
 }
-void switchwepoans() {
+void Character:: switchwepoans() {
     if (Keyboard::isKeyPressed(Keyboard::Num1)) {
         currentweopon = pistlo; currentfirerate = pistlofirerate; currentdamage = pistlodamage; currentammo = pistolAmmoLoaded;
     }
@@ -111,7 +126,7 @@ void switchwepoans() {
         currentweopon = rifle; currentfirerate = riflofirerate; currentdamage = riflodamage; currentammo = rifleAmmoLoaded;
     }
 }
-void reload() {
+void Character:: reload() {
     if (Keyboard::isKeyPressed(Keyboard::R)) {
         if (currentweopon == pistlo) { pistolAmmoLoaded = 8; currentammo = 8; }
         else { rifleAmmoLoaded = 30; currentammo = 30; }
@@ -122,20 +137,19 @@ void Character::Drawplayer(RenderWindow& window) {
     window.draw(re1);
     window.draw(re2);
     for (auto& b : bullets) window.draw(b.shape);
-    window.draw(players);
+    window.draw(spriteofplayer);
     window.draw(circle);
     window.draw(gun);
 
 
 };
-void Character::Updateplayer(float deltaTimeupdate , RenderWindow& window) {
-    playermovement(deltaTimeupdate);
+void Character::Updateplayer(  RenderWindow& window) {
+    playermovement();
     calculuting(window);
-    shooting(deltaTimeupdate);
-    playercollieer(deltaTimeupdate);
+    shooting();
+    bullet.bullethandling();
+    playercollieer();
     switchwepoans();
     reload();
     playeranimation();
-
-    Drawplayer(window);
 }

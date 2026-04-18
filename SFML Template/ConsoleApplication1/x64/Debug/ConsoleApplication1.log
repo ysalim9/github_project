@@ -1,14 +1,20 @@
 ﻿C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.CppBuild.targets(551,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (ConsoleApplication1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Main.cpp
+  zombie.cpp
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.h(7,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'zombie.cpp')
+  
 D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.h(13,16): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Main.cpp')
+  (compiling source file 'zombie.cpp')
   
-D:\downloads\github_project\SFML Template\ConsoleApplication1\player.h(13,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Main.cpp')
+D:\downloads\github_project\SFML Template\ConsoleApplication1\player.h(15,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'zombie.cpp')
   
-  player.cpp
-D:\downloads\github_project\SFML Template\ConsoleApplication1\player.h(13,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'player.cpp')
-  
-  Generating Code...
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(13,31): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(13,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(38,96): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(38,88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(39,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(39,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(57,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\downloads\github_project\SFML Template\ConsoleApplication1\zombie.cpp(58,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   ConsoleApplication1.vcxproj -> D:\downloads\github_project\SFML Template\x64\Debug\SFML Template.exe

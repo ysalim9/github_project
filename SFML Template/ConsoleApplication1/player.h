@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "zombie.h"
+extern float dt;
 
 using namespace sf;
 using namespace std;
@@ -22,14 +24,13 @@ struct Bullet {
     int damage;
     Vector2f velocity;
 
-    void updatebullet(float deltaTime) {
-        shape.move(velocity * deltaTime);
+     void updatebullet(float dt) {
+        shape.move(velocity * dt);
     }
-    void bullethandling(float dt);
+    void bullethandling();
 };
-
+extern Sprite spriteofplayer;
 struct Character {
-    Sprite players;
     float animTimer = 0;
     bool isdamage = false;
     bool isdead = false;
@@ -43,10 +44,13 @@ struct Character {
 
     void Startplayer();
     void Drawplayer(RenderWindow& window);
-    void Updateplayer(float dt, RenderWindow& window);
-    void playermovement(float dt);
+    void Updateplayer( RenderWindow& window);
+    void playermovement();
     void playeranimation();
-    void playercollieer(float dt);
+    void switchwepoans();
+    void shooting();
+    void reload();
+    void playercollieer();
     void calculuting(RenderWindow& window);
 };
 
@@ -68,4 +72,5 @@ extern int pistolAmmoLoaded;
 extern int rifleAmmoLoaded;
 extern int currentammo;
 extern bool isZPressed;
+extern struct Bullet bullet;
 
